@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="A local-first AI workspace for chat, writing, ebook drafting, prompt routing and creative tools.">
+  <title>Nova AI Studio — Agentic Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="https://pyscript.net/releases/2026.7.3/core.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-mark">✦</div><div><strong>Nova</strong><span>AI STUDIO</span></div></div>
+    <button class="new-chat" id="newChatBtn"><span>＋</span> New workspace chat</button>
+    <div class="side-label">WORKSPACE</div>
+    <button class="nav-item active" data-mode="chat"><span>◈</span> AI Chat <kbd>⌘ 1</kbd></button>
+    <button class="nav-item" data-mode="write"><span>✎</span> Writing Studio</button>
+    <button class="nav-item" data-mode="ebook"><span>▤</span> Ebook Creator <span class="pill">BETA</span></button>
+    <button class="nav-item" data-mode="image"><span>▧</span> Image Lab</button>
+    <button class="nav-item" data-mode="code"><span>⌘</span> Code Assistant</button>
+    <div class="side-label history-label">RECENT HISTORY <button id="clearHistoryBtn" title="Clear history">Clear</button></div>
+    <div id="historyList" class="history-list"></div>
+    <div class="sidebar-bottom">
+      <div class="local-status"><span class="status-dot"></span><div><strong>Local-first mode</strong><small>History stays in this browser</small></div></div>
+      <button class="nav-item" id="aboutBtn"><span>ⓘ</span> About & limitations</button>
+    </div>
+  </aside>
+
+  <main class="main-panel">
+    <header class="topbar">
+      <button class="mobile-menu" id="menuBtn" aria-label="Toggle menu">☰</button>
+      <div class="breadcrumb">Workspace <span>/</span> <strong id="modeLabel">AI Chat</strong></div>
+      <div class="top-actions"><span class="model-indicator"><i></i> Local assistant</span><button class="icon-btn" id="exportBtn" title="Export conversation">⇩</button></div>
+    </header>
+
+    <section class="welcome" id="welcome">
+      <div class="eyebrow"><span class="sparkle">✦</span> YOUR CREATIVE WORKSPACE</div>
+      <h1>What will you <span>make today?</span></h1>
+      <p>One workspace for ideas, writing, code and ebook planning.</p>
+      <div class="capability-grid">
+        <button class="cap-card" data-prompt="Create a practical 7-day plan to learn web development with HTML, CSS and JavaScript."><span class="cap-icon violet">⌘</span><strong>Plan & solve</strong><small>Break ideas into clear steps</small><span class="card-arrow">↗</span></button>
+        <button class="cap-card" data-mode="write" data-prompt="Write a polished, original article about using AI responsibly for beginners."><span class="cap-icon blue">✎</span><strong>Write content</strong><small>Draft, improve and structure</small><span class="card-arrow">↗</span></button>
+        <button class="cap-card" data-mode="ebook" data-prompt="Create an ebook outline for beginners about building useful web apps without coding."><span class="cap-icon green">▤</span><strong>Create an ebook</strong><small>Outline chapters and export text</small><span class="card-arrow">↗</span></button>
+        <button class="cap-card" data-mode="image" data-prompt="A premium minimalist ebook cover about creative productivity, navy and teal, bold title area, elegant editorial design."><span class="cap-icon orange">▧</span><strong>Explore visuals</strong><small>Build image prompts and SVG art</small><span class="card-arrow">↗</span></button>
+      </div>
+    </section>
+
+    <section class="conversation" id="conversation" aria-live="polite"></section>
+
+    <section class="composer-wrap">
+      <div class="tool-row">
+        <button class="tool-chip selected" data-mode="chat">✦ <span>Ask Nova</span></button>
+        <button class="tool-chip" data-mode="write">✎ <span>Write</span></button>
+        <button class="tool-chip" data-mode="ebook">▤ <span>Ebook</span></button>
+        <button class="tool-chip" data-mode="image">▧ <span>Image prompt</span></button>
+        <button class="tool-chip" data-mode="code">⌘ <span>Code</span></button>
+        <div class="route-status" id="routeStatus">Router: ready</div>
+      </div>
+      <form class="composer" id="chatForm">
+        <textarea id="promptInput" rows="1" placeholder="Message Nova… Ask, write, plan, or create." aria-label="Message Nova"></textarea>
+        <div class="composer-footer">
+          <div class="composer-hints"><span>↵ Send</span><span>•</span><span>Shift + ↵ new line</span></div>
+          <div class="composer-actions"><button type="button" class="round-btn" id="attachBtn" title="Attach text file">＋</button><input type="file" id="fileInput" accept=".txt,.md,.json,.csv" hidden><button class="send-btn" type="submit" aria-label="Send message">↑</button></div>
+        </div>
+      </form>
+      <p class="disclaimer">Nova runs local rules by default. No cloud AI API is connected. Outputs may need review.</p>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<dialog id="aboutDialog"><div class="dialog-head"><div><span class="eyebrow">PROJECT NOTES</span><h2>About Nova AI Studio</h2></div><button class="icon-btn" id="closeAbout">×</button></div>
+<p>This is a deployable starter workspace, not a full frontier AI model. The no-API mode uses prompt routing, templates and browser-side utilities. It can draft structured starter content, generate prompt ideas and export text.</p>
+<ul><li>Chat history is stored in this browser's localStorage.</li><li>Image Lab creates prompts and simple SVG artwork, not photorealistic AI images.</li><li>Real generative language/image models require downloading compatible model weights or connecting a hosted model/API.</li><li>Never paste secrets or sensitive information into a public demo.</li></ul><button class="primary-btn" id="okAbout">Got it</button></dialog>
+<script src="app.js"></script>
+</body>
+</html>
